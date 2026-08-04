@@ -600,12 +600,12 @@ def test_tess_clouduris():
     assert len(toi.cloud_uri) == 12
     # 6 of them should have cloud uris
     # JMP: 2026-08-04 MAST changed how files without uri are handled now it uses
-    # 'nan' instead of None. DV and TCE reports are in S3 buckets now. Only the 
+    # 'nan' instead of None. DV and TCE reports are in S3 buckets now. Only the
     # TESScut from the FFI does not have and uri.
-    assert np.sum((toi.cloud_uri.values != 'nan').astype(int)) == 11
+    assert np.sum((toi.cloud_uri.values != "nan").astype(int)) == 11
 
 
-# JMP: 2026-08-04 
+# JMP: 2026-08-04
 # MAST moved DV reports to S3 buckets and seems that they will do this for all DV reports
 # in the future. For the moment we sill skip this test until we come up with something
 # more robust.
