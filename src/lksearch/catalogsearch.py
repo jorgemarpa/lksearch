@@ -442,7 +442,8 @@ def _query_names(search_item):
 
     # Older astroquery versions return bytes-like objects, lets make sure things are strings
     for col, dtype in result_table.dtypes.items():
-        if dtype == object and col == "ID":  # Only process byte object columns
+        # "0" is numpy's internal string code for objects
+        if dtype == "O" and col == "ID":  # Only process byte object columns
             result_table[col] = result_table[col].str.decode("utf-8")
 
     # older astroquery versions use "ID" not 'id', lets be backwards compatible

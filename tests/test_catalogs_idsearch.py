@@ -1,10 +1,6 @@
 """Tests catalog id querying"""
 
-import numpy as np
 from astropy.coordinates import SkyCoord
-import pandas as pd
-from astropy.time import Time
-import astropy.units as u
 from lksearch.catalogsearch import query_id
 
 
@@ -96,7 +92,7 @@ def test_crossmatch():
     assert len(result) == 1
     assert result["Source"].values == 2133452475178900736
 
-    result = query_id(f"KIC 12644769", output_catalog="tic")
+    result = query_id("KIC 12644769", output_catalog="tic")
     assert len(result) == 1
     assert result["TIC"].values == 299096355
 

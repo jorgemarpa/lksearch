@@ -3,7 +3,6 @@
 import numpy as np
 import pandas as pd
 from astropy.coordinates import SkyCoord
-from astropy.table import Table
 from astropy.time import Time
 import astropy.units as u
 from lksearch.catalogsearch import query_region

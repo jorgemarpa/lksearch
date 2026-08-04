@@ -12,11 +12,10 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
 from astropy.time import Time
-from tqdm import tqdm
 
 from copy import deepcopy
 
-from .utils import SearchError, SearchWarning, suppress_stdout
+from .utils import SearchError, SearchWarning
 
 from . import conf, config, log
 
