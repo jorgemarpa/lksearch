@@ -154,6 +154,13 @@ def query_region(
         return empty_table
 
     result = result[catalog_name]
+    # Remove rows with bad Disp if catalog is TIC and Disp in on of the columns.
+    # A bad Dips is one of [DUPLICATE, ARTIFACT, SPLIT]
+    # see for details https://outerspace.stsci.edu/spaces/TESS/pages/40927681/TIC+v8+and+CTL+v8.xx+Data+Release+Notes
+    if "Disp" in result.columns:
+        result = result[~np.isin(result["Disp"], ["DUPLICATE", "ARTIFACT", "SPLIT"])]
+        # we remove the column
+        result.remove_column("Disp")
     # Rename the columns so that the output is uniform
     result.rename_columns(
         catalog_meta["rename_in"],
