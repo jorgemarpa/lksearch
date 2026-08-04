@@ -599,29 +599,36 @@ def test_tess_clouduris():
     # 12 products should be returned
     assert len(toi.cloud_uri) == 12
     # 6 of them should have cloud uris
-    assert np.sum((toi.cloud_uri.values != None).astype(int)) == 6
+    # JMP: 2026-08-04 MAST changed how files without uri are handled now it uses
+    # 'nan' instead of None. DV and TCE reports are in S3 buckets now. Only the 
+    # TESScut from the FFI does not have and uri.
+    assert np.sum((toi.cloud_uri.values != 'nan').astype(int)) == 11
 
 
-def test_tess_return_clouduri_not_download():
-    """Test to see if we return a S3 bucket instead of downloading if
-    `~conf.DOWNLOAD_CLOUD` = False
-    """
-    # reload the config, set download_cloud = False
-    conf.reload()
-    conf.DOWNLOAD_CLOUD = False
-    # Try to download a file without a S3 bucket, and one with
-    # Search for TESS data only. This by default includes both HLSPs and FFI cutouts.
-    toi = TESSSearch("TOI 1161", sector=14)
-    uris = toi.dvreports.cloud_uri
-    not_cloud = pd.isna(uris)
-    # A DV Report is not on the cloud - this should still get downloaded locally
-    dvr = toi.dvreports[not_cloud]
-    dvr_man = dvr[0].download()
-    assert os.path.isfile(dvr_man["Local Path"][0])
-    # A SPOC TPF is on the cloud, this should return a S3 bucket
-    mask = toi.timeseries.pipeline == "SPOC"
-    lc_man = toi.timeseries[mask][0].download()
-    assert lc_man["Local Path"][0].startswith("s3://")
+# JMP: 2026-08-04 
+# MAST moved DV reports to S3 buckets and seems that they will do this for all DV reports
+# in the future. For the moment we sill skip this test until we come up with something
+# more robust.
+# def test_tess_return_clouduri_not_download():
+#     """Test to see if we return a S3 bucket instead of downloading if
+#     `~conf.DOWNLOAD_CLOUD` = False
+#     """
+#     # reload the config, set download_cloud = False
+#     conf.reload()
+#     conf.DOWNLOAD_CLOUD = False
+#     # Try to download a file without a S3 bucket, and one with
+#     # Search for TESS data only. This by default includes both HLSPs and FFI cutouts.
+#     toi = TESSSearch("TOI 1161", sector=14)
+#     uris = toi.dvreports.cloud_uri
+#     not_cloud = pd.isna(uris)
+#     # A DV Report is not on the cloud - this should still get downloaded locally
+#     dvr = toi.dvreports[not_cloud]
+#     dvr_man = dvr[0].download()
+#     assert os.path.isfile(dvr_man["Local Path"][0])
+#     # A SPOC TPF is on the cloud, this should return a S3 bucket
+#     mask = toi.timeseries.pipeline == "SPOC"
+#     lc_man = toi.timeseries[mask][0].download()
+#     assert lc_man["Local Path"][0].startswith("s3://")
 
 
 def test_cached_files_no_filesize_check():
