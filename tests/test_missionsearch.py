@@ -607,7 +607,7 @@ def test_tess_clouduris():
 
 # JMP: 2026-08-04
 # MAST moved DV reports to S3 buckets and seems that they will do this for all DV reports
-# in the future. For the moment we'll test all DV reports are on cloud until we come up 
+# in the future. For the moment we'll test all DV reports are on cloud until we come up
 # with something more robust.
 def test_tess_rvreports_on_cloud():
     """Test to see if we return a S3 bucket instead of downloading if
