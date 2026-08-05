@@ -155,7 +155,7 @@ def query_region(
 
     result = result[catalog_name]
     # Remove rows with bad Disp if catalog is TIC and Disp in on of the columns.
-    # A bad Dips is one of [DUPLICATE, ARTIFACT]
+    # A bad Disp is one of [DUPLICATE, ARTIFACT]
     # see for details https://outerspace.stsci.edu/spaces/TESS/pages/40927681/TIC+v8+and+CTL+v8.xx+Data+Release+Notes
     # we keep "SPLIT" as these are expected to be true sources that were originally blended.
     if "Disp" in result.columns:
