@@ -154,6 +154,14 @@ def query_region(
         return empty_table
 
     result = result[catalog_name]
+    # Remove rows with bad Disp if catalog is TIC and Disp in on of the columns.
+    # A bad Disp is one of [DUPLICATE, ARTIFACT]
+    # see for details https://outerspace.stsci.edu/spaces/TESS/pages/40927681/TIC+v8+and+CTL+v8.xx+Data+Release+Notes
+    # we keep "SPLIT" as these are expected to be true sources that were originally blended.
+    if "Disp" in result.columns:
+        result = result[~np.isin(result["Disp"], ["DUPLICATE", "ARTIFACT"])]
+        # we remove the column
+        result.remove_column("Disp")
     # Rename the columns so that the output is uniform
     result.rename_columns(
         catalog_meta["rename_in"],
@@ -434,7 +442,8 @@ def _query_names(search_item):
 
     # Older astroquery versions return bytes-like objects, lets make sure things are strings
     for col, dtype in result_table.dtypes.items():
-        if dtype == object and col == "ID":  # Only process byte object columns
+        # "0" is numpy's internal string code for objects
+        if dtype == "O" and col == "ID":  # Only process byte object columns
             result_table[col] = result_table[col].str.decode("utf-8")
 
     # older astroquery versions use "ID" not 'id', lets be backwards compatible

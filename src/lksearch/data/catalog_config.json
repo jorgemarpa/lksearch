@@ -78,7 +78,8 @@
             "logg",
             "Teff",
             "Rad",
-            "Mass"
+            "Mass",
+            "Disp"
         ],
         "column_filters": "Tmag",
         "rename_in": [
